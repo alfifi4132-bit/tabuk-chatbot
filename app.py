@@ -368,6 +368,10 @@ if "welcome" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+    if st.button("🤖بدء محادثة جديدة"):
+      st.session_state.messages = []
+      st.rerun()  
+
 # -----------------------------------
 # CSS
 # -----------------------------------
@@ -825,9 +829,7 @@ with st.sidebar:
         if st.button(f"✨ {topic_name}"):
             quick_reply(topic_name)
 
-    if st.button("بدء محادثة جديدة"):
-      st.session_state.messages = []
-      st.rerun()       
+     
 # -----------------------------------
 # الصفحة الثانية
 # -----------------------------------
