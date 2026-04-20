@@ -873,16 +873,16 @@ with c3:
 st.write("")
 st.markdown('<div class="section-label">المحادثة</div>', unsafe_allow_html=True)
 
+
+if st.button("🤖بدء محادثة جديدة"):
+      st.session_state.messages = []
+      st.rerun()  
 # -----------------------------------
 # عرض الرسائل
 # -----------------------------------
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
-
-    if st.button("🤖بدء محادثة جديدة"):
-      st.session_state.messages = []
-      st.rerun()  
 
 
 # -----------------------------------
