@@ -518,7 +518,7 @@ section[data-testid="stSidebar"] * {
     background: linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
     border: 2px solid rgba(212,175,55,0.55);
     padding: 22px;
-    border-radius: 32px;
+    border-radius: 40px;
     box-shadow:
         0 12px 30px rgba(0,0,0,0.18),
         0 0 0 1px rgba(255,255,255,0.05) inset,
