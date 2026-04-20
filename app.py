@@ -513,7 +513,35 @@ section[data-testid="stSidebar"] * {
     color: white !important;
 }
 
-          
+.reset-btn button {
+    width: 100%;
+    border-radius: 999px;
+    padding: 0.8rem;
+    font-size: 15px;
+    font-weight: 800;
+
+    background: linear-gradient(135deg, #d4af37 0%, #f3dc8f 50%, #f8e8aa 100%);
+    color: #143a31;
+
+    border: 1px solid rgba(212,175,55,0.35);
+
+    box-shadow:
+        0 10px 20px rgba(212,175,55,0.18),
+        inset 0 1px 0 rgba(255,255,255,0.7);
+
+    transition: all 0.25s ease;
+}
+
+.reset-btn button:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 14px 26px rgba(212,175,55,0.28),
+        inset 0 1px 0 rgba(255,255,255,0.85);
+}
+
+
+
+
 .sidebar-logo-box {
     background: linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
     border: 2px solid rgba(212,175,55,0.55);
@@ -821,15 +849,18 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
-if st.button("🗑️ بدء محادثة جديدة"):
-    st.session_state.messages = []
-    st.rerun()
-
     for topic_name in sidebar_topics:
         if st.button(f"✨ {topic_name}"):
             quick_reply(topic_name)
+    st.markdown('<div class="reset-btn">', unsafe_allow_html=True)
 
-     
+    if st.button("🗑️ بدء محادثة جديدة"):
+
+        st.session_state.messages = []
+
+        st.rerun()
+
+    st.markdown('</div>', unsafe_allow_html=True)
 # -----------------------------------
 # الصفحة الثانية
 # -----------------------------------
