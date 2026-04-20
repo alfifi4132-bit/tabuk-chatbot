@@ -712,13 +712,17 @@ def ask_smart_assistant(user_question):
     try:
         response = client.responses.create(
             model="gpt-5.4",
-            instructions=(
-                "أنت مساعد ذكي خاص بجامعة تبوك. "
-                "أجب بالعربية فقط. "
-                "إذا كان السؤال عن جامعة تبوك أو الأنظمة الأكاديمية أو المكافآت أو الغياب أو الكلية التطبيقية، "
-                "فأجب بطريقة واضحة ومرتبة ومختصرة ومفيدة. "
-                "إذا كانت المعلومة غير مؤكدة فلا تخترع معلومات، واذكر ذلك بصراحة."
-            ),
+        instructions=(
+    "أنت مساعد ذكي خاص بجامعة تبوك. "
+    "أجب بالعربية فقط. "
+    "اجعل الأسلوب جميلًا جدًا، راقيًا، ولطيفًا، وواضحًا. "
+    "اكتب الجمل بشكل منظم مع علامات ترقيم صحيحة مثل الفاصلة العربية، والنقطة. "
+    "إذا كان الجواب يحتوي على تعداد أو نقاط، فاكتب كل نقطة في سطر مستقل، ولا تضعها كلها في سطر واحد. "
+    "اجعل تنسيق الجواب مرتبًا وسهل القراءة. "
+    "ابدأ بجواب مباشر، ثم أضف توضيحًا بسيطًا إذا احتاج الأمر. "
+    "اجعل الرد مختصرًا إلى متوسط، وليس طويلًا جدًا. "
+    "إذا كانت المعلومة غير مؤكدة فلا تخترع معلومات، واذكر ذلك بلطف."
+),
             input=user_question
         )
         return response.output_text.strip()
@@ -791,7 +795,31 @@ sidebar_topics = {
         "answer": "تخصصات الكلية التطبيقية تتحدد سنويًا حسب البرامج المطروحة، ويمكنك معرفة التخصصات المتاحة لهذا العام من خلال بوابة القبول أو موقع الكلية التطبيقية بجامعة تبوك."
     }
 }
-# -----------------------------------
+# -   st.markdown(prompt)
+
+with st.chat_message("assistant"):
+        matched_id = match_question(prompt)
+
+        if matched_id:
+            response = faq_items[matched_id]["answer"]
+        else:
+            smart_response = ask_smart_assistant(prompt)
+
+            if smart_response:
+                response = smart_response
+            else:
+                response = (
+                    "أعتذر، لم تتضح لي صياغة السؤال بالكامل 🌷\n\n"
+                    "يمكنكِ السؤال بصيغة أخرى مثل:\n"
+                    "- هل الصيفي مجاني؟\n"
+                    "- متى ينزل الجدول؟\n"
+                    "- كم نسبة الغياب؟\n"
+                    "- متى تنزل المكافأة؟\n"
+                    "- هل أقدر أكمل بكالوريوس بعد التطبيقية؟"
+                )
+
+        message_placeholder = st.empty()
+        full_response = ""
 # السايدبار
 # -----------------------------------
 with st.sidebar:
@@ -813,6 +841,12 @@ with st.sidebar:
     for topic_name in sidebar_topics:
         if st.button(f"✨ {topic_name}"):
             quick_reply(topic_name)
+
+    if st.button("بدء محادثة جديدة"):
+
+      st.session_state.messages = []
+
+    st.rerun()       
 # -----------------------------------
 # الصفحة الثانية
 # -----------------------------------
@@ -871,42 +905,43 @@ for message in st.session_state.messages:
 # إدخال المستخدم
 # -----------------------------------
 if prompt := st.chat_input("اكتبي سؤالك هنا..."):
-    st.session_state.messages.append({"role": "user", "content": prompt})
 
+    # عرض السؤال
     with st.chat_message("user"):
         st.markdown(prompt)
 
+    st.session_state.messages.append({
+        "role": "user",
+        "content": prompt
+    })
+
+    # عرض الجواب
     with st.chat_message("assistant"):
+
         matched_id = match_question(prompt)
 
-        if matched_id:
-            response = faq_items[matched_id]["answer"]
-        else:
-            smart_response = ask_smart_assistant(prompt)
+if matched_id:
+    base_answer = faq_items[matched_id]["answer"]
 
-            if smart_response:
-                response = smart_response
-            else:
-                response = (
-                    "أعتذر، لم تتضح لي صياغة السؤال بالكامل 🌷\n\n"
-                    "يمكنكِ السؤال بصيغة أخرى مثل:\n"
-                    "- هل الصيفي مجاني؟\n"
-                    "- متى ينزل الجدول؟\n"
-                    "- كم نسبة الغياب؟\n"
-                    "- متى تنزل المكافأة؟\n"
-                    "- هل أقدر أكمل بكالوريوس بعد التطبيقية؟"
-                )
+    smart_response = ask_smart_assistant(
+        f"السؤال: {prompt}\n"
+        f"الإجابة الأساسية: {base_answer}\n"
+        f"أعد صياغة هذه الإجابة بأسلوب جميل جدًا، ومرتب، وواضح، "
+        f"مع علامات ترقيم صحيحة، وإذا وجد تعداد اجعله تحت بعض."
+    )
 
-        message_placeholder = st.empty()
-        full_response = ""
+    response = smart_response if smart_response else base_answer
 
-        for chunk in response.split():
-            full_response += chunk + " "
-            time.sleep(0.03)
-            message_placeholder.markdown(full_response + "▌")
+else:
+    smart_response = ask_smart_assistant(prompt)
 
-        message_placeholder.markdown(full_response.strip())
-        st.session_state.messages.append({
-            "role": "assistant",
-            "content": full_response.strip()
-        })
+    if smart_response:
+        response = smart_response
+    else:
+        response = "أعتذر 🌷، لم أفهم السؤال"
+st.markdown(response)
+
+st.session_state.messages.append({
+        "role": "assistant",
+        "content": response
+    })
