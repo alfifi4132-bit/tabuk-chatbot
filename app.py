@@ -795,31 +795,7 @@ sidebar_topics = {
         "answer": "تخصصات الكلية التطبيقية تتحدد سنويًا حسب البرامج المطروحة، ويمكنك معرفة التخصصات المتاحة لهذا العام من خلال بوابة القبول أو موقع الكلية التطبيقية بجامعة تبوك."
     }
 }
-# -   st.markdown(prompt)
 
-with st.chat_message("assistant"):
-        matched_id = match_question(prompt)
-
-        if matched_id:
-            response = faq_items[matched_id]["answer"]
-        else:
-            smart_response = ask_smart_assistant(prompt)
-
-            if smart_response:
-                response = smart_response
-            else:
-                response = (
-                    "أعتذر، لم تتضح لي صياغة السؤال بالكامل 🌷\n\n"
-                    "يمكنكِ السؤال بصيغة أخرى مثل:\n"
-                    "- هل الصيفي مجاني؟\n"
-                    "- متى ينزل الجدول؟\n"
-                    "- كم نسبة الغياب؟\n"
-                    "- متى تنزل المكافأة؟\n"
-                    "- هل أقدر أكمل بكالوريوس بعد التطبيقية؟"
-                )
-
-        message_placeholder = st.empty()
-        full_response = ""
 # السايدبار
 # -----------------------------------
 with st.sidebar:
@@ -843,10 +819,8 @@ with st.sidebar:
             quick_reply(topic_name)
 
     if st.button("بدء محادثة جديدة"):
-
       st.session_state.messages = []
-
-    st.rerun()       
+      st.rerun()       
 # -----------------------------------
 # الصفحة الثانية
 # -----------------------------------
@@ -917,31 +891,31 @@ if prompt := st.chat_input("اكتبي سؤالك هنا..."):
 
     # عرض الجواب
     with st.chat_message("assistant"):
-
         matched_id = match_question(prompt)
 
         if matched_id:
-           base_answer = faq_items[matched_id]["answer"]
+            base_answer = faq_items[matched_id]["answer"]
 
-           smart_response = ask_smart_assistant(
-               f"السؤال: {prompt}\n"
-               f"الإجابة الأساسية: {base_answer}\n"
-               f"أعد صياغة هذه الإجابة بأسلوب جميل جدًا، ومرتب، وواضح، "
-               f"مع علامات ترقيم صحيحة، وإذا وجد تعداد اجعله تحت بعض."
-    )
+            smart_response = ask_smart_assistant(
+                f"السؤال: {prompt}\n"
+                f"الإجابة الأساسية: {base_answer}\n"
+                f"أعد صياغة هذه الإجابة بأسلوب جميل جدًا، ومرتب، وواضح، "
+                f"مع علامات ترقيم صحيحة، وإذا وجد تعداد اجعله تحت بعض."
+            )
 
-           response = smart_response if smart_response else base_answer
+            response = smart_response if smart_response else base_answer
 
         else:
             smart_response = ask_smart_assistant(prompt)
 
             if smart_response:
-               response = smart_response
+                response = smart_response
             else:
-               response = "أعتذر 🌷، لم أفهم السؤال"
+                response = "أعتذر 🌷، لم أفهم السؤال"
+
         st.markdown(response)
 
-st.session_state.messages.append({
+    st.session_state.messages.append({
         "role": "assistant",
         "content": response
     })
