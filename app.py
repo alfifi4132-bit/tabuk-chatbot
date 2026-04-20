@@ -821,6 +821,10 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
+if st.button("🗑️ بدء محادثة جديدة"):
+    st.session_state.messages = []
+    st.rerun()
+
     for topic_name in sidebar_topics:
         if st.button(f"✨ {topic_name}"):
             quick_reply(topic_name)
@@ -873,10 +877,6 @@ with c3:
 st.write("")
 st.markdown('<div class="section-label">المحادثة</div>', unsafe_allow_html=True)
 
-
-if st.button("🤖بدء محادثة جديدة"):
-      st.session_state.messages = []
-      st.rerun()  
 # -----------------------------------
 # عرض الرسائل
 # -----------------------------------
