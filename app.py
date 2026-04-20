@@ -920,26 +920,26 @@ if prompt := st.chat_input("اكتبي سؤالك هنا..."):
 
         matched_id = match_question(prompt)
 
-if matched_id:
-    base_answer = faq_items[matched_id]["answer"]
+        if matched_id:
+           base_answer = faq_items[matched_id]["answer"]
 
-    smart_response = ask_smart_assistant(
-        f"السؤال: {prompt}\n"
-        f"الإجابة الأساسية: {base_answer}\n"
-        f"أعد صياغة هذه الإجابة بأسلوب جميل جدًا، ومرتب، وواضح، "
-        f"مع علامات ترقيم صحيحة، وإذا وجد تعداد اجعله تحت بعض."
+           smart_response = ask_smart_assistant(
+               f"السؤال: {prompt}\n"
+               f"الإجابة الأساسية: {base_answer}\n"
+               f"أعد صياغة هذه الإجابة بأسلوب جميل جدًا، ومرتب، وواضح، "
+               f"مع علامات ترقيم صحيحة، وإذا وجد تعداد اجعله تحت بعض."
     )
 
-    response = smart_response if smart_response else base_answer
+           response = smart_response if smart_response else base_answer
 
-else:
-    smart_response = ask_smart_assistant(prompt)
+        else:
+            smart_response = ask_smart_assistant(prompt)
 
-    if smart_response:
-        response = smart_response
-    else:
-        response = "أعتذر 🌷، لم أفهم السؤال"
-st.markdown(response)
+            if smart_response:
+               response = smart_response
+            else:
+               response = "أعتذر 🌷، لم أفهم السؤال"
+        st.markdown(response)
 
 st.session_state.messages.append({
         "role": "assistant",
