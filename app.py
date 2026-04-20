@@ -513,17 +513,24 @@ section[data-testid="stSidebar"] * {
     color: white !important;
 }
 
+          
 .sidebar-logo-box {
-    background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08));
-    border: 1px solid rgba(255,255,255,0.35);
-    padding: 16px;
-    border-radius: 28px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
+    border: 2px solid rgba(212,175,55,0.55);
+    padding: 22px;
+    border-radius: 32px;
     box-shadow:
-        0 14px 26px rgba(0,0,0,0.12),
-        inset 0 1px 0 rgba(255,255,255,0.14);
-    backdrop-filter: blur(6px);
+        0 12px 30px rgba(0,0,0,0.18),
+        0 0 0 1px rgba(255,255,255,0.05) inset,
+        0 0 18px rgba(212,175,55,0.12);
+    backdrop-filter: blur(8px);
     text-align: center;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
+}
+
+.sidebar-logo-box img {
+    max-width: 110px;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.18));
 }
 
 .sidebar-info-box {
