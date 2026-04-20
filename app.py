@@ -368,10 +368,6 @@ if "welcome" not in st.session_state:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-    if st.button("🤖بدء محادثة جديدة"):
-      st.session_state.messages = []
-      st.rerun()  
-
 # -----------------------------------
 # CSS
 # -----------------------------------
@@ -883,6 +879,11 @@ st.markdown('<div class="section-label">المحادثة</div>', unsafe_allow_ht
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
+
+    if st.button("🤖بدء محادثة جديدة"):
+      st.session_state.messages = []
+      st.rerun()  
+
 
 # -----------------------------------
 # إدخال المستخدم
