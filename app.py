@@ -933,29 +933,56 @@ if "first_load_cleared" not in st.session_state:
 # -----------------------------------
 if prompt := st.chat_input("اكتبي سؤالك هنا..."):
 
-    with st.chat_message("user"):
-        st.markdown(prompt)
-
     st.session_state.messages.append({
         "role": "user",
         "content": prompt
     })
 
+    with st.chat_message("user"):
+        st.markdown(prompt)
+
     with st.chat_message("assistant"):
-     matched_id = match_question(prompt)
+        matched_id = match_question(prompt)
 
-    time.sleep(1)
+        time.sleep(1)
 
-    if matched_id:
-        response = faq_items[matched_id]["answer"]
+        if matched_id:
+            response = faq_items[matched_id]["answer"]
+        else:
+            smart_response = ask_smart_assistant(
+                f"أجيبي باختصار شديد وبشكل مرتب عن السؤال التالي:\n{prompt}"
+            )
 
-    else:
-        response = "أعتذر 🌷، لم أفهم السؤال. ممكن تعيدين صياغته؟"
+            if smart_response:
+                response = smart_response
+            else:
+                response = "أعتذر 🌷، لم أفهم السؤال. ممكن تعيدين صياغته؟"
 
-    placeholder = st.empty()
-    typed = ""
+        typed = ""
+        message_box = st.empty()
 
-    for char in response:
-        typed += char
-        placeholder.markdown(typed)
-        time.sleep(0.01)
+        for char in response:
+            typed += char
+            message_box.markdown(
+                f"""
+                <div style="
+                    background: rgba(255,255,255,0.95);
+                    border: 1px solid rgba(212,175,55,0.25);
+                    border-radius: 18px;
+                    padding: 14px 18px;
+                    line-height: 1.9;
+                    color: #143a31;
+                    direction: rtl;
+                    text-align: right;
+                ">
+                    {typed}
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+            time.sleep(0.01)
+
+    st.session_state.messages.append({
+        "role": "assistant",
+        "content": response
+    })
