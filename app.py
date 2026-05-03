@@ -764,6 +764,16 @@ def ask_smart_assistant(user_question):
 
     except Exception:
         return None
+    
+
+def typewriter_text(text, delay=0.015):
+    placeholder = st.empty()
+    typed = ""
+
+    for char in text:
+        typed += char
+        placeholder.markdown(typed)
+        time.sleep(delay)
 # -----------------------------------
 # الصفحة الأولى
 # -----------------------------------
@@ -931,30 +941,23 @@ if prompt := st.chat_input("اكتبي سؤالك هنا..."):
     })
 
     # عرض الجواب
-    with st.chat_message("assistant"):
-        matched_id = match_question(prompt)
+with st.chat_message("assistant"):
+    matched_id = match_question(prompt)
 
-        if matched_id:
-            base_answer = faq_items[matched_id]["answer"]
+    if matched_id:
+        response = faq_items[matched_id]["answer"]
 
-            smart_response = ask_smart_assistant(
-                f"السؤال: {prompt}\n"
-                f"الإجابة الأساسية: {base_answer}\n"
-                f"أعد صياغة هذه الإجابة بأسلوب جميل جدًا، ومرتب، وواضح، "
-                f"مع علامات ترقيم صحيحة، وإذا وجد تعداد اجعله تحت بعض."
-            )
+    else:
+        smart_response = ask_smart_assistant(
+            f"أجب باختصار شديد وبشكل مرتب عن هذا السؤال:\n{prompt}"
+        )
 
-            response = smart_response if smart_response else base_answer
-
+        if smart_response:
+            response = smart_response
         else:
-            smart_response = ask_smart_assistant(prompt)
+            response = "أعتذر 🌷، لم أفهم السؤال. أعيدي صياغته بطريقة أخرى."
 
-            if smart_response:
-                response = smart_response
-            else:
-                response = "أعتذر 🌷، لم أفهم السؤال"
-
-        st.markdown(response)
+    typewriter_text(response)
 
     st.session_state.messages.append({
         "role": "assistant",
