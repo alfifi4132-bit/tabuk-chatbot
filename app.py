@@ -980,7 +980,7 @@ if prompt := st.chat_input("اكتبي سؤالك هنا..."):
                 """,
                 unsafe_allow_html=True
             )
-            time.sleep(0.01)
+            time.sleep(0.06)
 
     st.session_state.messages.append({
         "role": "assistant",
