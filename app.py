@@ -942,20 +942,20 @@ if prompt := st.chat_input("اكتبي سؤالك هنا..."):
     })
 
     with st.chat_message("assistant"):
-        matched_id = match_question(prompt)
+     matched_id = match_question(prompt)
 
-        if matched_id:
-            response = faq_items[matched_id]["answer"]
+    time.sleep(1)
 
-        if smart_response:
-         response = smart_response
-        else:
-                response = "أعتذر 🌷، لم أفهم السؤال. ممكن تعيدين صياغته؟"
+    if matched_id:
+        response = faq_items[matched_id]["answer"]
 
-        placeholder = st.empty()
-        typed = ""
+    else:
+        response = "أعتذر 🌷، لم أفهم السؤال. ممكن تعيدين صياغته؟"
 
-        for char in response:
-            typed += char
-            placeholder.markdown(typed)
-            time.sleep(0.01)
+    placeholder = st.empty()
+    typed = ""
+
+    for char in response:
+        typed += char
+        placeholder.markdown(typed)
+        time.sleep(0.01)
