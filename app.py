@@ -924,14 +924,15 @@ st.markdown('<div class="section-label">المحادثة</div>', unsafe_allow_ht
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
-
+if "first_load_cleared" not in st.session_state:
+    st.session_state.messages = []
+    st.session_state.first_load_cleared = True
 
 # -----------------------------------
 # إدخال المستخدم
 # -----------------------------------
 if prompt := st.chat_input("اكتبي سؤالك هنا..."):
 
-    # عرض السؤال
     with st.chat_message("user"):
         st.markdown(prompt)
 
@@ -940,26 +941,21 @@ if prompt := st.chat_input("اكتبي سؤالك هنا..."):
         "content": prompt
     })
 
-    # عرض الجواب
-with st.chat_message("assistant"):
-    matched_id = match_question(prompt)
+    with st.chat_message("assistant"):
+        matched_id = match_question(prompt)
 
-    if matched_id:
-        response = faq_items[matched_id]["answer"]
-
-    else:
-        smart_response = ask_smart_assistant(
-            f"أجب باختصار شديد وبشكل مرتب عن هذا السؤال:\n{prompt}"
-        )
+        if matched_id:
+            response = faq_items[matched_id]["answer"]
 
         if smart_response:
-            response = smart_response
+         response = smart_response
         else:
-            response = "أعتذر 🌷، لم أفهم السؤال. أعيدي صياغته بطريقة أخرى."
+                response = "أعتذر 🌷، لم أفهم السؤال. ممكن تعيدين صياغته؟"
 
-    typewriter_text(response)
+        placeholder = st.empty()
+        typed = ""
 
-    st.session_state.messages.append({
-        "role": "assistant",
-        "content": response
-    })
+        for char in response:
+            typed += char
+            placeholder.markdown(typed)
+            time.sleep(0.01)
